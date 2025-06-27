@@ -1,6 +1,6 @@
 from baralho import Baralho
 from carta import Carta
-from interface2 import PlayerInterface, interface
+from interface2 import PlayerInterface
 from player import Player
 from placar import Placar
 from interface_image import InterfaceImage
@@ -10,6 +10,7 @@ class Mesa:
         self.__player = Player()
         self.__baralho = Baralho()
         self.__placar = Placar()
+        self.__interface = PlayerInterface()
     def descartar(self):
         pass
     def finalizar_turno(self):
@@ -22,9 +23,9 @@ class Mesa:
                 self.__placar.add_bandos_local(selecionadas.get_especie(),pontos)
                 self.__player.remover_cartas_selecionadas()
             else:
-                interface.notificar("Não é possível formar um bando")
+                self.__interface.notificar("Não é possível formar um bando")
         else:
-            interface.notificar("Você deve selecionar cartas para formar bando")
+            self.__interface.notificar("Você deve selecionar cartas para formar bando")
     def iniciar_partida(self):
         self.__player.inicialize("00","leonardo")
         self.__baralho.criar_baralho()

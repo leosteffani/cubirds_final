@@ -6,8 +6,8 @@ class InterfaceImage:
         self.__cartas_na_mao_local = []
         self.__cartas_mesa = []
         self.__n_cartas_jogador_remoto = 0
-        self.__bandos_local = {}
-        self.__bandos_remoto = {}
+        self.__bandos_local = []
+        self.__bandos_remoto = []
 
     def set_baralho(self,n_cartas):
         self.__baralho = n_cartas
@@ -21,6 +21,10 @@ class InterfaceImage:
         self.__placar_remoto = pontos
     def set_mao(self,cartas):
         self.__cartas_na_mao_local = cartas
+    def set_bandos_remoto(self,bandos):
+        self.__bandos_remoto = bandos
+    def set_bandos_local(self, bandos):
+        self.__bandos_local = bandos
 
     def get_baralho(self):
         return self.__baralho
