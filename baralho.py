@@ -1,4 +1,5 @@
 from carta import Carta
+import random
 
 class Baralho:
     def __init__(self):
@@ -14,13 +15,6 @@ class Baralho:
             [6, 9, 20],  # especie 8: 6 cartas = bando pequeno, 9 cartas = bando grande, 20 cartas = total
         ]
 
-    def criar_baralho(self):
-        count = 0
-        for tipo_carta in self.__referencia_especies:
-            count += 1
-            for carta in range(tipo_carta[2]):
-                temp = Carta(count,tipo_carta[0],tipo_carta[1])
-                self.__cartas.append(temp)
     def get_cartas(self):
         return self.__cartas
     def get_num_cartas(self):
@@ -38,3 +32,21 @@ class Baralho:
             tipo_carta = self.__referencia_especies[carta-1]
             obj_carta = Carta(carta,tipo_carta[0],tipo_carta[1])
             self.__cartas.append(obj_carta)
+
+    def criar_baralho(self):
+        for especie in range(len(self.__referencia_especies)):
+            for i in range(self.__referencia_especies[especie][2]):
+                bando_pequeno = self.__referencia_especies[especie][0]
+                bando_grande = self.__referencia_especies[especie][1]
+                self.__cartas.append(Carta(especie + 1, bando_pequeno, bando_grande))
+        random.shuffle(self.__cartas)  # Embaralha as cartas do baralho
+
+    def remove_carta(self, index):
+        self.__cartas.pop(index)
+
+    def get_cartas_iniciais(self):
+        retorno = []
+        for carta in self.__cartas:
+            retorno.append(str(carta.get_especie()))
+        retorno = "".join(retorno)
+        return retorno
