@@ -104,11 +104,9 @@ class PlayerInterface:
     def create_placar(self):
         if self.__turno:
             placar= Label(self.main_window, bg="steelblue", text=str(self.n_pontos_player1)+' VS '+str(self.n_pontos_player2), font="arial 30")
-            placar.bind("<Button-1>", lambda event: self.placar())
             placar.grid(row=0, column=2)
         else:
             placar = Label(self.main_window, bg="firebrick2",text=str(self.n_pontos_player1) + ' VS ' + str(self.n_pontos_player2), font="arial 30")
-            placar.bind("<Button-1>", lambda event: self.placar())
             placar.grid(row=0, column=2)
     #cria o baralho
     def create_baralho(self):
@@ -178,8 +176,6 @@ class PlayerInterface:
         print('precionou botão na posicao '+str(a_line)+" "+ str(a_column) )
     def add(self, a_line, a_column):
         print('precionou botão add na posicao ' + str(a_line) + " " + str(a_column))
-    def placar(self):
-        print('precionou placar')
     def baralho(self):
         print('precionou baralho')
         #self.n_cartas_baralho +=1
