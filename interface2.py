@@ -8,6 +8,8 @@ class PlayerInterface:
         self.n_cartas_baralho = 43
         self.__matriz_mesa = [[1, 2, 3], [4, 5, 6], [7, 8, 1], [2, 5, 7]]
         self.__mao = [1, 2, 3, 4, 5, 6, 7, 8]
+        self.__bandos_local = [[4,2]]
+        self.__bandos_remoto = [[6,2],[7,1]]
         self.__n_cartas_jogador_remoto = 8
         self.__turno = False
 
@@ -33,6 +35,8 @@ class PlayerInterface:
                              ]
         self.add_image = PhotoImage(file="images/add.png")
         self.__back_card = PhotoImage(file="images/back.png")
+        self.formar_bando_image = PhotoImage(file="images/formar bando.png")
+        self.__passar_turno_image= PhotoImage(file="images/passar turno.png")
 
         self.fill_main_window()
         #self.create_descarte()
@@ -61,6 +65,13 @@ class PlayerInterface:
         self.mao_frame.grid(row=2, column=1)
         self.mao_remota_frame = Frame(self.main_window, width=1280, height=120, bg="lightgray")
         self.mao_remota_frame.grid(row=0, column=1)
+        self.bandos_local_frame = Frame(self.main_window, width=172, height=600, bg="lightgray")
+        self.bandos_local_frame.grid(row=1, column=0)
+        self.bandos_remoto_frame = Frame(self.main_window, width=172, height=600, bg="lightgray")
+        self.bandos_remoto_frame.grid(row=1, column=2)
+        self.acoes_frame = Frame(self.main_window, width=172, height=200, bg="lightgray")
+        self.acoes_frame.grid(row=2, column=0)
+
 
         # imagem vazia para tudo ficar centralizado (nao sei se tem um jeito melhor de fazer isso)
         w = Canvas(self.main_window, width=86, height=120, highlightthickness=0, bg="lightgray")
@@ -76,11 +87,19 @@ class PlayerInterface:
         self.create_placar()
         self.create_mao()
         self.create_mao_remota()
+        self.create_bandos_remoto()
+        self.create_bandos_local()
+        self.create_formar_bando()
+        self.create_finalizar_turno()
     #cria o descarte(desativado)
-    def create_descarte(self):
-        descarte = Label(self.main_window, bg="lightgray", text="desc", font="arial 30",image=self.an_image, compound='center')
-        descarte.bind("<Button-1>", lambda event: self.descarte())
-        descarte.grid(row=0, column=2)
+    def create_formar_bando(self):
+        descarte = Label(self.acoes_frame, bd=0,image=self.formar_bando_image)
+        descarte.bind("<Button-1>", lambda event: self.formar_bando())
+        descarte.grid(row=0, column=0)
+    def create_finalizar_turno(self):
+        descarte = Label(self.acoes_frame, bd=0,image=self.__passar_turno_image)
+        descarte.bind("<Button-1>", lambda event: self.finalizar_turno())
+        descarte.grid(row=1, column=0)
     #cria o placar
     def create_placar(self):
         if self.__turno:
@@ -125,6 +144,16 @@ class PlayerInterface:
         for x in range(self.__n_cartas_jogador_remoto):
             carta_mao = Label(self.mao_remota_frame, bd=0, image=self.__back_card)
             carta_mao.grid(row=0, column=x+1)
+    def create_bandos_local(self):
+        for x in range(len(self.__bandos_local)):
+            for y in range(self.__bandos_local[x][1]):
+                carta_bando = Label( self.bandos_local_frame, bd=0, image=self.birds_images[self.__bandos_local[x][0]-1])
+                carta_bando.grid(row=x, column=y)
+    def create_bandos_remoto(self):
+        for x in range(len(self.__bandos_remoto)):
+            for y in range(self.__bandos_remoto[x][1]):
+                carta_mao = Label( self.bandos_remoto_frame, bd=0, image=self.birds_images[self.__bandos_remoto[x][0]-1])
+                carta_mao.grid(row=x, column=y)
     #cria o menu e seus botoes
     def create_menubar(self):
         self.menubar = Menu(self.main_window)
@@ -159,5 +188,9 @@ class PlayerInterface:
         print('precionou descarte')
     def click_carta_mao(self,a_column):
         print('precionou botão carta da mao na posicao '+str(a_column))
+    def finalizar_turno(self):
+        print("finalizar_turno")
+    def formar_bando(self):
+        print("formar_bando")
 
 interface = PlayerInterface()
