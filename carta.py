@@ -1,5 +1,5 @@
 class Carta:
-    def __init__(self,especie,bando_pequeno,bando_grande):
+    def __init__(self, especie, bando_pequeno, bando_grande):
         self.__especie = especie
         self.__bando_grande = bando_grande
         self.__bando_pequeno = bando_pequeno
