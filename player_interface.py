@@ -225,8 +225,16 @@ class PlayerInterface(DogPlayerInterface):
 
     def receive_start(self, start_status):
         players = start_status.get_players()
-        local_player_id = start_status.get_local_id()
-        self.mesa.iniciar_partida(players, local_player_id)
+        name = players[0][0]
+        order = players[0][2]
+        identifier = start_status.get_local_id()
+        mensagem = start_status.get_message()
+        self.mesa.inicializar_local_player(identifier, name)
+        if order == "1":
+            self.mesa.set_match_status(1)
+        else:
+            self.mesa.set_match_status(4)
+        self.notificar(mensagem)
 
     def selecionar_carta(self, posicao):
         self.mesa.selecionar_carta(posicao)
