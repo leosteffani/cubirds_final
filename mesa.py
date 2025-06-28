@@ -376,3 +376,6 @@ class Mesa:
 
     def set_match_status(self, status):
         self.__match_status = status
+
+    def inicializar_local_player(self, identifier, name):
+        self.__local_player.initialize(identifier, name)
