@@ -33,6 +33,11 @@ class Mesa:
             self.__match_status = 4
             self.__player_interface.notificar("Aguardando o primeiro jogador jogar")
         
+        game_state = self.get_status()
+        self.__player_interface.atualizar_interface(game_state)
+        move_to_send = self.get_move(inicio=True)
+        self.__player_interface.send_move(move_to_send)
+        
     # selecionar_carta
     def selecionar_carta(self, posicao):
         if self.__match_status == 1 or self.__match_status == 2 or self.__match_status == 3:
@@ -40,7 +45,7 @@ class Mesa:
                 self.__local_player.remover_carta_selecionada(posicao)
                 self.__player_interface.remover_selecao_carta(posicao)
             else:
-                self.__local_player.adicionar_carta_seleionada(posicao)
+                self.__local_player.adicionar_carta_selecionada(posicao)
                 self.__player_interface.adicionar_selecao_carta(posicao)
 
     # jogar_cartas
@@ -101,11 +106,11 @@ class Mesa:
                         self.__player_interface.notificar("Você venceu a partida!")
                         self.__match_status = 5
 
-                        move_to_send = self.get_move()
+                        move_to_send = self.get_move(inicio=False)
                         self.__player_interface.send_move(move_to_send)
                     else:
                         self.__match_status = 3
-                        move_to_send = self.get_move()
+                        move_to_send = self.get_move(inicio=False)
                         self.__player_interface.send_move(move_to_send)
                 else:
                     self.__player_interface.notificar("Não é possível formar um bando")
@@ -120,7 +125,7 @@ class Mesa:
             game_state = self.get_status()
             self.__player_interface.atualizar_interface(game_state)
             self.__match_status = 4
-            move_to_send = self.get_move()
+            move_to_send = self.get_move(inicio=False)
             self.__player_interface.send_move(move_to_send)
 
     # receber_jogada
