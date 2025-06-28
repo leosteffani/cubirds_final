@@ -12,16 +12,19 @@ class Placar:
     def atualizar_placar_local(self,pontos,bando):
         self.__pontos_player_local += pontos
         self.__bandos_formados_local.append(bando)
+        
     def atualizar_placar_remoto(self, pontos, bandos):
-        self.__pontos_player_remoto = int(pontos)
-        self.__bandos_formados_remoto = []
+        self.pontos_player_remoto = int(pontos)
+        self.bandos_remoto = []
+    
         if bandos != "sem_bandos":
             bandos_split = bandos.split(",")
-            for bando in bandos_split:
-                especie_tamanho = bando.split("/")
-                especie = int(especie_tamanho[0])
-                tamanho = int(especie_tamanho[1])
-                self.__bandos_formados_remoto.append([especie, tamanho])
+        for bando in bandos_split:
+            especie_tamanho = bando.split("/")
+            especie = int(especie_tamanho[0])
+            tamanho = int(especie_tamanho[1])
+            self.bandos_remoto.append([especie, tamanho])
+
     def get_bandos_local(self):
         return self.__bandos_formados_local
     def get_bandos_remoto(self):
