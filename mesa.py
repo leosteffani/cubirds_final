@@ -1,18 +1,17 @@
 from baralho import Baralho
 from carta import Carta
-from interface2 import PlayerInterface
 from player import Player
 from placar import Placar
 from interface_image import InterfaceImage
 
 class Mesa:
-    def __init__(self):
+    def __init__(self, player_interface):
         self.__local_player = Player()
         self.__baralho = Baralho()
         self.__placar = Placar()
-        self.__player_interface = PlayerInterface()
         self.__cartas_na_mesa = [[], [], [], []]  # 4 linhas, cada uma com uma lista de cartas
         self.__n_cartas_jogador_remoto = 0
+        self.__player_interface = player_interface
         self.__match_status = 0
 
 #### REQUISITOS FUNCIONAIS ####
@@ -366,3 +365,6 @@ class Mesa:
     def montar_mao_jogador_local(self):
         cartas = self.__baralho.pegar_cartas(8)
         self.__local_player.adicionar_cartas_na_mao(cartas)
+
+    def set_match_status(self, status):
+        self.__match_status = status
