@@ -7,8 +7,8 @@ from interface_image import InterfaceImage
 class Mesa:
     def __init__(self, player_interface):
         self.__local_player = Player()
-        self.__baralho = Baralho()
         self.__placar = Placar()
+        self.__baralho = Baralho()
         self.__cartas_na_mesa = [[], [], [], []]  # 4 linhas, cada uma com uma lista de cartas
         self.__n_cartas_jogador_remoto = 0
         self.__player_interface = player_interface
