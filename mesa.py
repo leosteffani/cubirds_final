@@ -324,7 +324,7 @@ class Mesa:
                     if especie_atual not in especies_usadas_linha:
                         self.__cartas_na_mesa[linha].append(carta_atual)
                         especies_usadas_linha.append(especie_atual)
-                        self.__baralho.remove_carta(i)
+                        self.__baralho.remover_carta(i)
                         break
 
     def verificar_sanduiche(self, especie, linha, coluna):

@@ -23,6 +23,14 @@ class Baralho:
     def get_num_cartas(self):
         return len(self.__cartas)
     
+    #get_cartas_iniciais
+    def get_cartas_iniciais(self):
+        retorno = []
+        for carta in self.__cartas:
+            retorno.append(str(carta.get_especie()))
+        retorno = "".join(retorno)
+        return retorno
+    
     #pegar_cartas
     def pegar_cartas(self, n_cartas):
         cartas = []
@@ -34,10 +42,11 @@ class Baralho:
     # criar_baralho
     def criar_baralho(self):
         for especie in range(len(self.__dicionario_especies)):
-            for i in range(self.__dicionario_especies[especie][2]):
+            for total_cartas in range(self.__dicionario_especies[especie][2]):
                 bando_pequeno = self.__dicionario_especies[especie][0]
                 bando_grande = self.__dicionario_especies[especie][1]
-                self.__cartas.append(Carta(especie+1, bando_pequeno, bando_grande))
+                obj_carta = Carta(especie+1, bando_pequeno, bando_grande)
+                self.__cartas.append(obj_carta)
 
         random.shuffle(self.__cartas)
 
@@ -45,18 +54,11 @@ class Baralho:
     def set_baralho(self, cartas_string):
         lista_cartas = list(cartas_string)
         for carta in lista_cartas:
-            carta = int(carta)
-            tipo_carta = self.__dicionario_especies[carta-1]
-            obj_carta = Carta(carta,tipo_carta[0],tipo_carta[1])
+            especie = int(carta)
+            especie_dicionario = self.__dicionario_especies[especie-1]
+            obj_carta = Carta(especie, especie_dicionario[0], especie_dicionario[1])
             self.__cartas.append(obj_carta)
-
-    #get_cartas_iniciais
-    def get_cartas_iniciais(self):
-        retorno = []
-        for carta in self.__cartas:
-            retorno.append(str(carta.get_especie()))
-        retorno = "".join(retorno)
-        return retorno
     
-    def remove_carta(self, index):
+    #remover_carta
+    def remover_carta(self, index):
         self.__cartas.pop(index)
