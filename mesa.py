@@ -33,11 +33,6 @@ class Mesa:
             self.__match_status = 4
             self.__player_interface.notificar("Aguardando o primeiro jogador jogar")
         
-        game_state = self.get_status()
-        self.__player_interface.atualizar_interface(game_state)
-        move_to_send = self.get_move(inicio=True)
-        self.__player_interface.send_move(move_to_send)
-        
     # selecionar_carta
     def selecionar_carta(self, posicao):
         if self.__match_status == 1 or self.__match_status == 2 or self.__match_status == 3:
@@ -63,7 +58,7 @@ class Mesa:
                         self.add_cartas_na_mesa(selecionadas, linha, coluna)
 
                         game_state = self.get_status()
-                        self.__player_interface.atualizar_mesa(game_state)
+                        self.__player_interface.atualizar_interface(game_state)
                         
                         especie = selecionadas[0].get_especie()
                         sanduiche = self.verificar_sanduiche(especie, linha, coluna)
@@ -99,7 +94,7 @@ class Mesa:
                     self.__local_player.remover_cartas_selecionadas_da_mao()
 
                     game_state = self.get_status()
-                    self.__player_interface.atualizar_placar(game_state)
+                    self.__player_interface.atualizar_interface(game_state)
 
                     vitoria = self.verificar_vitoria()
                     if vitoria:
@@ -190,7 +185,7 @@ class Mesa:
             move_to_send["bandos"] = bandos_string
 
             # numero de cartas na mão do jogador local
-            n_cartas_jogador_local = len(self.__local_player.get_cartas_na_mao())
+            n_cartas_jogador_local = len(self.__local_player.get_mao())
             move_to_send["n_cartas_jogador"] = str(n_cartas_jogador_local)
 
             if self.__match_status == 5:
@@ -216,19 +211,27 @@ class Mesa:
         # numero de cartas na mão do jogador remoto
         interface_image.set_n_cartas_jogador_remoto(self.__n_cartas_jogador_remoto)
 
+        # cartas na mão do jogador local
+        interface_image.set_cartas_na_mao_local(self.__local_player.get_cartas_na_mao())
+
         # placar
         interface_image.set_pontos_local(self.__placar.get_pontos_local())
         interface_image.set_pontos_remoto(self.__placar.get_pontos_remoto())
+
+        #bandos
+        interface_image.set_bandos_local(self.__placar.get_bandos_local())
+        interface_image.set_bandos_remoto(self.__placar.get_bandos_remoto())
 
         # mesa
         matriz_posicoes = []
         for linha in range(4):
             nova_linha = []
             for coluna in range(len(self.__cartas_na_mesa[linha])):
-                nova_linha.append(self.__cartas_na_mesa[linha][coluna].get_id())
+                nova_linha.append(self.__cartas_na_mesa[linha][coluna].get_especie())
             matriz_posicoes.append(nova_linha)
 
         interface_image.set_mesa(matriz_posicoes)
+
         return interface_image
 
 #### MÉTODOS DE CONVERSÃO DA MESA ####
@@ -242,14 +245,14 @@ class Mesa:
             else:
                 cartas_ids = []
                 for carta in linha:
-                    cartas_ids.append(str(carta.get_id()))
+                    cartas_ids.append(str(carta.get_especie()))
                 mesa_strings.append("/".join(cartas_ids))
         
         return mesa_strings
 
     def montar_mesa_recebida(self, mesa_strings):
         matriz_mesa = []
-        dicionario_especies = self.__baralho.dicionario_especies
+        dicionario_especies = self.__baralho.get_dicionario_especies()
 
         for linha in mesa_strings:
             linha_mesa = []
@@ -260,9 +263,8 @@ class Mesa:
                 
             nova_linha = linha.split('/')
             for carta in nova_linha:
-                carta_id = int(carta)
-                indice_especie = carta_id - 1
-                nova_carta = Carta(carta_id, dicionario_especies[indice_especie][0], dicionario_especies[indice_especie][1])
+                indice_especie = int(carta) - 1
+                nova_carta = Carta(indice_especie, dicionario_especies[indice_especie][0], dicionario_especies[indice_especie][1])
                 linha_mesa.append(nova_carta)
             matriz_mesa.append(linha_mesa)
 

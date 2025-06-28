@@ -23,6 +23,10 @@ class Baralho:
     def get_num_cartas(self):
         return len(self.__cartas)
     
+    #get_dicionario_especies
+    def get_dicionario_especies(self):
+        return self.__dicionario_especies
+    
     #get_cartas_iniciais
     def get_cartas_iniciais(self):
         retorno = []

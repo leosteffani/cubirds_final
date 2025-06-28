@@ -140,7 +140,7 @@ class PlayerInterface(DogPlayerInterface):
         for linha in range(len(self.__matriz_mesa)):
             aLabel = Label(self.table_frame, bd=0, image=self.add_image)
             aLabel.grid(row=linha, column=0)
-            aLabel.bind("<Button-1>", lambda event, a_line=linha, a_column=0: self.add(a_line, a_column))
+            aLabel.bind("<Button-1>", lambda event, a_line=linha, a_column=0: self.jogar_cartas(a_line, a_column))
         
         # adiciona as cartas
         for linha in range(len(self.__matriz_mesa)):
@@ -153,7 +153,7 @@ class PlayerInterface(DogPlayerInterface):
         for linha in range(len(self.__matriz_mesa)):
             aLabel = Label(self.table_frame, bd=0, image=self.add_image)
             aLabel.grid(row=linha, column=len(self.__matriz_mesa[linha])+2)
-            aLabel.bind("<Button-1>", lambda event, a_line=linha, a_column=len(self.__matriz_mesa[linha])+1: self.add(a_line, a_column))
+            aLabel.bind("<Button-1>", lambda event, a_line=linha, a_column=len(self.__matriz_mesa[linha])+1: self.jogar_cartas(a_line, a_column))
 
     def create_mao(self):
         for x in range(len(self.__mao)):
@@ -190,23 +190,21 @@ class PlayerInterface(DogPlayerInterface):
 
 #### MÉTODOS DE INTERAÇÃO ####
 
-    def click_mesa(self, a_line, a_column):
-        print('precionou botão na posicao '+str(a_line)+" "+ str(a_column))
-
-    def add(self, a_line, a_column):
-        print('precionou botão add na posicao ' + str(a_line) + " " + str(a_column))
-
-    def click_carta_mao(self, a_column):
-        print('precionou botão carta da mao na posicao '+str(a_column))
-
-    #### Métodos corretos ####
-
     def atualizar_interface(self, interface):
+        pass
+
+    def adicionar_selecao_carta(self, posicao):
+        pass
+
+    def remover_selecao_carta(self, posicao):
         pass
 
     def encerrar_aplicacao(self):
         sleep(5)
         self.main_window.destroy()
+    
+    def send_move(self, move_to_send):
+        self.dog_server_interface.send_move(move_to_send)
 
     def notificar(self, message):
         messagebox.showinfo(message=message)
@@ -223,7 +221,7 @@ class PlayerInterface(DogPlayerInterface):
             self.mesa.iniciar_partida(players, local_player_id)
             game_state = self.mesa.get_status()
             self.atualizar_interface(game_state)
-            move_to_send = self.mesa.get_move()
+            move_to_send = self.mesa.get_move(inicio=True)
             self.dog_server_interface.send_move(move_to_send)
 
     def receive_start(self, start_status):

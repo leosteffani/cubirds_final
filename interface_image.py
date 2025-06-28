@@ -1,13 +1,13 @@
 class InterfaceImage:
     def __init__(self):
         self.__baralho = 0
-        self.__mesa = []
+        self.__n_cartas_jogador_remoto = 0
+        self.__cartas_na_mao_local = []
         self.__placar_local = 0
         self.__placar_remoto = 0
-        self.__cartas_na_mao_local = []
-        self.__n_cartas_jogador_remoto = 0
         self.__bandos_local = []
         self.__bandos_remoto = []
+        self.__mesa = []
 
     #getters
     def get_baralho(self):
