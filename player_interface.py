@@ -1,8 +1,24 @@
 from tkinter import *
+from tkinter import messagebox
+from tkinter import simpledialog
+from time import sleep
+from dog.dog_interface import DogPlayerInterface
+from dog.dog_actor import DogActor
+from mesa import Mesa
 
-class PlayerInterface:
+class PlayerInterface(DogPlayerInterface):
     def __init__(self):
         self.main_window = Tk()
+        self.fill_main_window()
+        self.mesa = Mesa(self)
+        game_state = self.mesa.get_status()
+        self.atualizar_interface(game_state)
+        player_name = simpledialog.askstring(title="Player identification", prompt="Qual o seu nome?")
+        self.dog_server_interface = DogActor()
+        message = self.dog_server_interface.initialize(player_name, self)
+        messagebox.showinfo(message=message)
+        self.main_window.mainloop()
+
         self.n_pontos_player1 = 1
         self.n_pontos_player2 = 7
         self.n_cartas_baralho = 43
@@ -38,7 +54,7 @@ class PlayerInterface:
         self.formar_bando_image = PhotoImage(file="images/formar bando.png")
         self.__passar_turno_image = PhotoImage(file="images/passar turno.png")
 
-        self.fill_main_window()
+        
         # preenchimento da janela
         self.main_window.mainloop()
 
@@ -143,7 +159,7 @@ class PlayerInterface:
         for x in range(len(self.__mao)):
             carta_mao = Label(self.mao_frame, bd=0, image=self.birds_images[self.__mao[x]-1])
             carta_mao.grid(row=0, column=x+1)
-            carta_mao.bind("<Button-1>", lambda event, a_column=x: self.click_carta_mao(a_column))
+            carta_mao.bind("<Button-1>", lambda event, a_column=x: self.selecionar_carta(a_column))
 
     def create_mao_remota(self):
         for x in range(self.__n_cartas_jogador_remoto):
@@ -174,33 +190,63 @@ class PlayerInterface:
 
 #### MÉTODOS DE INTERAÇÃO ####
 
-    def start_match(self):
-        self.tela_inicial()
-        print('precionou iniciar jogo')
-
-    def start_game(self):
-        print('precionou restaurar estado inicial')
-
     def click_mesa(self, a_line, a_column):
         print('precionou botão na posicao '+str(a_line)+" "+ str(a_column))
 
     def add(self, a_line, a_column):
         print('precionou botão add na posicao ' + str(a_line) + " " + str(a_column))
 
-    def baralho(self):
-        print('precionou baralho')
-
-    def descarte(self):
-        print('precionou descarte')
-
     def click_carta_mao(self, a_column):
         print('precionou botão carta da mao na posicao '+str(a_column))
 
-    def finalizar_turno(self):
-        print("finalizar_turno")
+    #### Métodos corretos ####
+
+    def atualizar_interface(self, interface):
+        pass
+
+    def encerrar_aplicacao(self):
+        sleep(5)
+        self.main_window.destroy()
+
+    def notificar(self, message):
+        messagebox.showinfo(message=message)
+
+    def start_match(self):
+        start_status = self.dog_server_interface.start_match(2)
+        code = start_status.get_code()
+        message = start_status.get_message()
+        if code == 0 or code == 1:
+            messagebox.showinfo(message=message)
+        else:
+            players = start_status.get_players()
+            local_player_id = start_status.get_local_id()
+            self.mesa.iniciar_partida(players, local_player_id)
+            game_state = self.mesa.get_status()
+            self.atualizar_interface(game_state)
+            move_to_send = self.mesa.get_move()
+            self.dog_server_interface.send_move(move_to_send)
+
+    def receive_start(self, start_status):
+        players = start_status.get_players()
+        local_player_id = start_status.get_local_id()
+        self.mesa.iniciar_partida(players, local_player_id)
+
+    def selecionar_carta(self, posicao):
+        self.mesa.selecionar_carta(posicao)
+
+    def jogar_cartas(self, linha, coluna):
+        self.mesa.jogar_cartas(linha, coluna)
 
     def formar_bando(self):
-        print("formar_bando")
+        self.mesa.formar_bando()
 
+    def finalizar_turno(self):
+        self.mesa.finalizar_turno()
 
-interface = PlayerInterface()
+    def receive_move(self, jogada):
+        self.mesa.receber_jogada(jogada)
+    
+    def receive_withdrawal_notification(self):
+        self.mesa.set_match_status(5)
+        self.notificar("O seu adversário abandonou a partida, você ganhou!")
+        self.encerrar_aplicacao()
