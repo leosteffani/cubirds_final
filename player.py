@@ -17,8 +17,11 @@ class Player:
     
     # remover_cartas_selecionadas_da_mao
     def remover_cartas_selecionadas_da_mao(self):
-        for posicao in self.__cartas_selecionadas:
+        # remove em ordem decrescente para evitar mudança de índices
+        for posicao in sorted(self.__cartas_selecionadas, reverse=True):
             self.__mao.pop(posicao)
+        # limpa a lista de cartas selecionadas após remoção
+        self.__cartas_selecionadas.clear()
 
     # get_mao
     def get_mao(self):
@@ -29,7 +32,7 @@ class Player:
         self.__cartas_selecionadas.append(carta)
     
     # remover_carta_selecionada
-    def remover_carta_selecionada(self,posicao):
+    def remover_carta_selecionada(self, posicao):
         self.__cartas_selecionadas.remove(posicao)
     
     # get_cartas_selecionadas    
@@ -40,7 +43,7 @@ class Player:
         return retorno
     
     # verificar_selecao
-    def verificar_selecao(self,posicao):
+    def verificar_selecao(self, posicao):
         if posicao in self.__cartas_selecionadas:
             return True
         else:

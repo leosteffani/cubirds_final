@@ -212,11 +212,11 @@ class Mesa:
         interface_image.set_n_cartas_jogador_remoto(self.__n_cartas_jogador_remoto)
 
         # cartas na mão do jogador local
-        interface_image.set_cartas_na_mao_local(self.__local_player.get_cartas_na_mao())
+        interface_image.set_cartas_na_mao_local(self.__local_player.get_mao())
 
         # placar
-        interface_image.set_pontos_local(self.__placar.get_pontos_local())
-        interface_image.set_pontos_remoto(self.__placar.get_pontos_remoto())
+        interface_image.set_placar_local(self.__placar.get_pontos_local())
+        interface_image.set_placar_remoto(self.__placar.get_pontos_remoto())
 
         #bandos
         interface_image.set_bandos_local(self.__placar.get_bandos_local())
@@ -263,8 +263,9 @@ class Mesa:
                 
             nova_linha = linha.split('/')
             for carta in nova_linha:
-                indice_especie = int(carta) - 1
-                nova_carta = Carta(indice_especie, dicionario_especies[indice_especie][0], dicionario_especies[indice_especie][1])
+                especie = int(carta)
+                indice_especie = especie - 1
+                nova_carta = Carta(especie, dicionario_especies[indice_especie][0], dicionario_especies[indice_especie][1])
                 linha_mesa.append(nova_carta)
             matriz_mesa.append(linha_mesa)
 

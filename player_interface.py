@@ -118,7 +118,6 @@ class PlayerInterface(DogPlayerInterface):
         self.menubar.add_cascade(menu=self.menu_file, label='File')
 
         self.menu_file.add_command(label='Iniciar jogo', command=self.start_match)
-        self.menu_file.add_command(label='restaurar estado inicial', command=self.start_game)
 
         self.menubar.option_add('*tearOff', FALSE)
 
