@@ -77,6 +77,12 @@ class PlayerInterface(DogPlayerInterface):
         # cria os frames que serao usados
         self.table_frame = Frame(self.main_window, width=1280, height=480, bg="lightgray")
         self.table_frame.grid(row=1, column=1)
+        self.linhas_frames = [Frame(self.table_frame, width=1280, height=120, bg="lightgray"),
+                              Frame(self.table_frame, width=1280, height=120, bg="lightgray"),
+                              Frame(self.table_frame, width=1280, height=120, bg="lightgray"),
+                              Frame(self.table_frame, width=1280, height=120, bg="lightgray")]
+        for frame in range(len(self.linhas_frames)):
+            self.linhas_frames[frame].grid(row=frame, column=0)
         self.mao_frame = Frame(self.main_window, width=1280, height=120, bg="lightgray")
         self.mao_frame.grid(row=2, column=1)
         self.mao_remota_frame = Frame(self.main_window, width=1280, height=120, bg="lightgray")
@@ -137,26 +143,23 @@ class PlayerInterface(DogPlayerInterface):
     def create_baralho(self):
         baralho = Label(self.main_window, bg="lightgray", text=self.n_cartas_baralho, font="arial 40", image=self.birds_images[0], compound='center')
         baralho.grid(row=0, column=0)
-
     def create_table(self):
-        # adiciona os botoes add no inicio de cada linha
+        #adiciona os botoes add no inicio de cada linha
         for linha in range(len(self.__matriz_mesa)):
-            aLabel = Label(self.table_frame, bd=0, image=self.add_image)
-            aLabel.grid(row=linha, column=0)
-            aLabel.bind("<Button-1>", lambda event, a_line=linha, a_column=0: self.jogar_cartas(a_line, 0))
-        
-        # adiciona as cartas
+            aLabel = Label(self.linhas_frames[linha], bd=0, image=self.add_image)
+            aLabel.grid(row=0, column=0)
+            aLabel.bind("<Button-1>", lambda event,a_line=linha, a_column=0: self.add( a_line, a_column))
+        #adiciona as cartas
         for linha in range(len(self.__matriz_mesa)):
-            for coluna in range(1, len(self.__matriz_mesa[linha])+1):
+            for coluna in range(1,len(self.__matriz_mesa[linha])+1):
                 carta = self.__matriz_mesa[linha][coluna-1]
-                aLabel = Label(self.table_frame, bd=0, image=self.birds_images[carta-1])
-                aLabel.grid(row=linha, column=coluna)
-        
+                aLabel = Label(self.linhas_frames[linha], bd=0, image=self.birds_images[carta-1])
+                aLabel.grid(row=0, column=coluna)
         # adiciona os botoes add no final de cada linha
         for linha in range(len(self.__matriz_mesa)):
-            aLabel = Label(self.table_frame, bd=0, image=self.add_image)
-            aLabel.grid(row=linha, column=len(self.__matriz_mesa[linha])+2)
-            aLabel.bind("<Button-1>", lambda event, a_line=linha, a_column=len(self.__matriz_mesa[linha])+1: self.jogar_cartas(a_line, 1))
+            aLabel = Label(self.linhas_frames[linha], bd=0, image=self.add_image)
+            aLabel.grid(row=0, column=len(self.__matriz_mesa[linha])+2)
+            aLabel.bind("<Button-1>", lambda event,a_line=linha, a_column=len(self.__matriz_mesa[linha])+1: self.add(a_line, a_column))
 
     def create_mao(self):
         for x in range(len(self.__mao)):
@@ -209,7 +212,7 @@ class PlayerInterface(DogPlayerInterface):
         self.__bandos_local = interface.get_bandos_local()
         self.__bandos_remoto = interface.get_bandos_remoto()
         self.__n_cartas_jogador_remoto = interface.get_n_cartas_jogador_remoto()
-        self.__turno = False # modificar dps
+        self.__turno = interface.get_turno()
         self.__selecao_mao = [False]*len(self.__mao)
         self.draw_tela()
 
