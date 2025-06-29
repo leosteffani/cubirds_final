@@ -117,9 +117,9 @@ class Mesa:
     # finalizar_turno
     def finalizar_turno(self):
         if self.__match_status == 2 or self.__match_status == 3:
+            self.__match_status = 4
             game_state = self.get_status()
             self.__player_interface.atualizar_interface(game_state)
-            self.__match_status = 4
             move_to_send = self.get_move(inicio=False)
             self.__player_interface.send_move(move_to_send)
 
@@ -134,7 +134,11 @@ class Mesa:
                 self.__local_player.adicionar_cartas_na_mao(cartas)
             self.atualizar_baralho(jogada["num_cartas_baralho"])
             self.__n_cartas_jogador_remoto = int(jogada["n_cartas_jogador"])
-            self.__match_status = 1
+
+            self.__placar.atualizar_placar_remoto(jogada["pontos_local"],jogada["bandos"])
+
+            if jogada["match_status"] == "next":
+                self.__match_status = 1
 
         mesa_strings = [jogada["primeira_linha_mesa"], jogada["segunda_linha_mesa"], jogada["terceira_linha_mesa"], jogada["quarta_linha_mesa"]]
         self.montar_mesa_recebida(mesa_strings)
@@ -190,6 +194,8 @@ class Mesa:
 
             if self.__match_status == 5:
                 move_to_send["match_status"] = "finished"
+            elif self.__match_status == 3:
+                move_to_send["match_status"] = "progress"
             else:
                 move_to_send["match_status"] = "next"
         
