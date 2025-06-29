@@ -92,9 +92,9 @@ class PlayerInterface(DogPlayerInterface):
         self.mao_frame.grid(row=2, column=1)
         self.mao_remota_frame = Frame(self.main_window, width=1280, height=120, bg="lightgray")
         self.mao_remota_frame.grid(row=0, column=1)
-        self.bandos_local_frame = Frame(self.main_window, width=172, height=600, bg="steelblue")
+        self.bandos_local_frame = Frame(self.main_window, width=172, height=650, bg="lightgray")
         self.bandos_local_frame.grid(row=1, column=0)
-        self.bandos_remoto_frame = Frame(self.main_window, width=172, height=600, bg="firebrick2")
+        self.bandos_remoto_frame = Frame(self.main_window, width=172, height=700, bg="lightgray")
         self.bandos_remoto_frame.grid(row=1, column=2)
         self.acoes_frame = Frame(self.main_window, width=172, height=200, bg="lightgray")
         self.acoes_frame.grid(row=2, column=0)
@@ -194,18 +194,26 @@ class PlayerInterface(DogPlayerInterface):
             carta_mao.grid(row=0, column=x + 1)
 
     def create_bandos_local(self):
+        bando_local = Label(self.bandos_local_frame, bg="steelblue", text="você", font="arial 10")
+        bando_local.grid(row=0, column=0)
+        temp = Label(self.bandos_local_frame, bg="lightgray",width = 1, height = 1)
+        temp.grid(row=0, column=1)
         for x in range(len(self.__bandos_local)):
             for y in range(self.__bandos_local[x][1]):
-                carta_bando = Label(self.bandos_local_frame, bd=0,
+                carta_bando = Label(self.bandos_local_frame, bd=0,bg="steelblue",
                                     image=self.birds_images[self.__bandos_local[x][0] - 1])
-                carta_bando.grid(row=x, column=y)
+                carta_bando.grid(row=x+1, column=y)
 
     def create_bandos_remoto(self):
+        bando_remoto = Label(self.bandos_remoto_frame, bg="firebrick2", text="oponente", font="arial 10")
+        bando_remoto.grid(row=0, column=0)
+        temp = Label(self.bandos_remoto_frame, bg="lightgray", width=1, height=1)
+        temp.grid(row=0, column=1)
         for x in range(len(self.__bandos_remoto)):
             for y in range(self.__bandos_remoto[x][1]):
                 carta_mao = Label(self.bandos_remoto_frame, bd=0,
                                   image=self.birds_images[self.__bandos_remoto[x][0] - 1])
-                carta_mao.grid(row=x, column=y)
+                carta_mao.grid(row=x+1, column=y)
 
     def create_formar_bando(self):
         descarte = Label(self.acoes_frame, bd=0, image=self.formar_bando_image)
