@@ -11,11 +11,11 @@ class PlayerInterface(DogPlayerInterface):
     def __init__(self):
         self.main_window = Tk()
 
-    #### VARIÁVEIS GLOBAIS ####
+    #### VARIÁVEIS ####
 
-        self.n_pontos_local = 0
-        self.n_pontos_remoto = 0
-        self.n_cartas_baralho = 0
+        self.__n_pontos_local = 0
+        self.__n_pontos_remoto = 0
+        self.__n_cartas_baralho = 0
         self.__matriz_mesa = []
         self.__mao = []
         self.__bandos_local = []
@@ -143,15 +143,15 @@ class PlayerInterface(DogPlayerInterface):
     def create_placar(self):
         if self.__turno:
             placar = Label(self.main_window, bg="steelblue",
-                           text=str(self.n_pontos_local) + ' VS ' + str(self.n_pontos_remoto), font="arial 30")
+                           text=str(self.__n_pontos_local) + ' VS ' + str(self.__n_pontos_remoto), font="arial 30")
             placar.grid(row=0, column=2)
         else:
             placar = Label(self.main_window, bg="firebrick2",
-                           text=str(self.n_pontos_local) + ' VS ' + str(self.n_pontos_remoto), font="arial 30")
+                           text=str(self.__n_pontos_local) + ' VS ' + str(self.__n_pontos_remoto), font="arial 30")
             placar.grid(row=0, column=2)
 
     def create_baralho(self):
-        baralho = Label(self.main_window, bg="lightgray", text=self.n_cartas_baralho, font="arial 40",
+        baralho = Label(self.main_window, bg="lightgray", text=self.__n_cartas_baralho, font="arial 40",
                         image=self.birds_images[0], compound='center')
         baralho.grid(row=0, column=0)
 
@@ -232,9 +232,9 @@ class PlayerInterface(DogPlayerInterface):
 
     #### MÉTODOS DE INTERAÇÃO ####
     def atualizar_interface(self, interface):
-        self.n_pontos_local = interface.get_placar_local()
-        self.n_pontos_remoto = interface.get_placar_remoto()
-        self.n_cartas_baralho = interface.get_baralho()
+        self.__n_pontos_local = interface.get_placar_local()
+        self.__n_pontos_remoto = interface.get_placar_remoto()
+        self.__n_cartas_baralho = interface.get_baralho()
         self.__matriz_mesa = interface.get_mesa()
         self.__mao = interface.get_cartas_na_mao_local()
         self.__bandos_local = interface.get_bandos_local()
@@ -310,5 +310,3 @@ class PlayerInterface(DogPlayerInterface):
         self.mesa.set_match_status(5)
         self.notificar("O seu adversário abandonou a partida, você ganhou!")
         self.encerrar_aplicacao()
-
-interface = PlayerInterface()

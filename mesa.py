@@ -219,7 +219,7 @@ class Mesa:
 
         # cartas na mão do jogador local
         lista_mao =[]
-        mao =self.__local_player.get_mao()
+        mao = self.__local_player.get_mao()
         for carta in mao:
             lista_mao.append(carta.get_especie())
         interface_image.set_cartas_na_mao_local(lista_mao)
@@ -363,11 +363,9 @@ class Mesa:
             for i in range(len(mesa_linha)-1, -1, -1):
                 if mesa_linha[i].get_especie() == especie:
                     # Capturar deste índice até o final (exclusivo)
-                    cartas_capturadas = []
                     for j in range(len(mesa_linha)-1, i, -1):
-                        cartas_capturadas.insert(0, mesa_linha.pop())  # Remove do final
-                    return cartas_capturadas
-        
+                        retorno.insert(0, mesa_linha.pop())  # Remove do final
+                    return retorno
         return retorno
 
     def add_cartas_na_mesa(self, cartas, linha, coluna):
