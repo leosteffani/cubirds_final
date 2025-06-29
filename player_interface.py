@@ -231,16 +231,16 @@ class PlayerInterface(DogPlayerInterface):
             widget.destroy()
 
     #### MÉTODOS DE INTERAÇÃO ####
-    def atualizar_interface(self, interface):
-        self.__n_pontos_local = interface.get_placar_local()
-        self.__n_pontos_remoto = interface.get_placar_remoto()
-        self.__n_cartas_baralho = interface.get_baralho()
-        self.__matriz_mesa = interface.get_mesa()
-        self.__mao = interface.get_cartas_na_mao_local()
-        self.__bandos_local = interface.get_bandos_local()
-        self.__bandos_remoto = interface.get_bandos_remoto()
-        self.__n_cartas_jogador_remoto = interface.get_n_cartas_jogador_remoto()
-        self.__turno = interface.get_turno()
+    def atualizar_interface(self, game_state):
+        self.__n_pontos_local = game_state.get_placar_local()
+        self.__n_pontos_remoto = game_state.get_placar_remoto()
+        self.__n_cartas_baralho = game_state.get_baralho()
+        self.__matriz_mesa = game_state.get_mesa()
+        self.__mao = game_state.get_cartas_na_mao_local()
+        self.__bandos_local = game_state.get_bandos_local()
+        self.__bandos_remoto = game_state.get_bandos_remoto()
+        self.__n_cartas_jogador_remoto = game_state.get_n_cartas_jogador_remoto()
+        self.__turno = game_state.get_turno()
         self.__selecao_mao = [False] * len(self.__mao)
         self.draw_tela()
 

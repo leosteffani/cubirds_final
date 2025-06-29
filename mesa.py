@@ -57,12 +57,12 @@ class Mesa:
                         self.__local_player.remover_cartas_selecionadas_da_mao()
                        
                         especie = selecionadas[0].get_especie()
-                        sanduiche = self.verificar_sanduiche(especie, linha, coluna)
+                        cartas = self.verificar_sanduiche(especie, linha, coluna)
                        
                         self.add_cartas_na_mesa(selecionadas, linha, coluna)
 
-                        if len(sanduiche) > 0:
-                            self.__local_player.adicionar_cartas_na_mao(sanduiche)
+                        if len(cartas) > 0:
+                            self.__local_player.adicionar_cartas_na_mao(cartas)
 
                             especies_na_fileira = self.contar_especies_na_fileira(linha)
                             while especies_na_fileira <= 1:
@@ -309,18 +309,18 @@ class Mesa:
         
         return cont == len(selecionadas)
 
-    def verificar_formacao_bando(self, cartas):
-        primeira_carta = cartas[0]
+    def verificar_formacao_bando(self, selecionadas):
+        primeira_carta = selecionadas[0]
 
         # Verifica se todas as cartas têm a mesma espécie
-        for i in range(1, len(cartas)):
-            if cartas[i].get_especie() != primeira_carta.get_especie():
+        for i in range(1, len(selecionadas)):
+            if selecionadas[i].get_especie() != primeira_carta.get_especie():
                 return 0
         
         # Verifica se o número de cartas corresponde ao tamanho do bando
-        if len(cartas) == primeira_carta.get_bando_pequeno():
+        if len(selecionadas) == primeira_carta.get_bando_pequeno():
             return 1
-        elif len(cartas) == primeira_carta.get_bando_grande():
+        elif len(selecionadas) == primeira_carta.get_bando_grande():
             return 2
         else:
             return 0
@@ -368,12 +368,12 @@ class Mesa:
                     return retorno
         return retorno
 
-    def add_cartas_na_mesa(self, cartas, linha, coluna):
+    def add_cartas_na_mesa(self, selecionadas, linha, coluna):
         if coluna == 0:
-            for carta in cartas:
+            for carta in selecionadas:
                 self.__cartas_na_mesa[linha].insert(0, carta)
         else:
-            for carta in cartas:
+            for carta in selecionadas:
                 self.__cartas_na_mesa[linha].append(carta)
     
     def contar_especies_na_fileira(self, linha):
