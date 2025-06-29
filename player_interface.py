@@ -92,9 +92,9 @@ class PlayerInterface(DogPlayerInterface):
         self.mao_frame.grid(row=2, column=1)
         self.mao_remota_frame = Frame(self.main_window, width=1280, height=120, bg="lightgray")
         self.mao_remota_frame.grid(row=0, column=1)
-        self.bandos_local_frame = Frame(self.main_window, width=172, height=600, bg="lightgray")
+        self.bandos_local_frame = Frame(self.main_window, width=172, height=600, bg="steelblue")
         self.bandos_local_frame.grid(row=1, column=0)
-        self.bandos_remoto_frame = Frame(self.main_window, width=172, height=600, bg="lightgray")
+        self.bandos_remoto_frame = Frame(self.main_window, width=172, height=600, bg="firebrick2")
         self.bandos_remoto_frame.grid(row=1, column=2)
         self.acoes_frame = Frame(self.main_window, width=172, height=200, bg="lightgray")
         self.acoes_frame.grid(row=2, column=0)
@@ -136,7 +136,7 @@ class PlayerInterface(DogPlayerInterface):
         self.menu_file = Menu(self.menubar)
         self.menubar.add_cascade(menu=self.menu_file, label='File')
 
-        self.menu_file.add_command(label='Iniciar jogo', command=self.start_match)
+        self.menu_file.add_command(label='Iniciar partida', command=self.start_match)
 
         self.menubar.option_add('*tearOff', FALSE)
 
