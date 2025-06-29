@@ -55,12 +55,13 @@ class Mesa:
                     todas = self.verificar_especie_selecionada(mao, selecionadas)
                     if todas:
                         self.__local_player.remover_cartas_selecionadas_da_mao()
+                       
                         especie = selecionadas[0].get_especie()
                         sanduiche = self.verificar_sanduiche(especie, linha, coluna)
+                       
                         self.add_cartas_na_mesa(selecionadas, linha, coluna)
 
                         if len(sanduiche) > 0:
-                            print("sanduiche encontrado")
                             self.__local_player.adicionar_cartas_na_mao(sanduiche)
 
                             especies_na_fileira = self.contar_especies_na_fileira(linha)
@@ -68,8 +69,6 @@ class Mesa:
                                 carta = self.__baralho.pegar_cartas(1)
                                 self.add_cartas_na_mesa(carta, linha, coluna)
                                 especies_na_fileira = self.contar_especies_na_fileira(linha)
-                                print("especies na fileira: ", especies_na_fileira)
-                        
                         self.__match_status = 2
                         game_state = self.get_status()
                         self.__player_interface.atualizar_interface(game_state)

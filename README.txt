@@ -1,21 +1,25 @@
-Creating your game
+=== CUBIRDS - INSTRUÇÕES DE INSTALAÇÃO E EXECUÇÃO ===
 
-1. Create and activate a virtual environment (in the folder that contains the folders dog and config);
+Este é um jogo CuBirds implementado em Python com interface gráfica Tkinter.
 
-2. Execute 'pip install -r requirements.txt' (to install the libraries used by the framework);
+PASSO A PASSO PARA EXECUTAR O JOGO:
 
-3. Go to folder 'config' and follow the instructions therein;
+1. Navegue até a pasta do projeto:
+   cd cubirds
 
-4. DEVELOP YOUR GAME;
+2. Crie um ambiente virtual:
+   virtualenv venv
 
-5. Execute 'pip freeze > requirements.txt' (to update requirements.txt with the libraries used by your game);
+3. Ative o ambiente virtual:
+   venv\Scripts\activate
 
-6. To distribute your game:
+4. Instale as dependências:
+   pip install -r requirements.txt
 
-	a. Remove the folder of the virtual environment;
-	b. Compact and send your game with the following instrucions:
-		I. Create and activate a virtual environment;
-		II. Execute pip 'install -r requirements.txt';
-		III. To run the game:  <name_of_your_game>.py.
+5. Configure o jogo (gere o ID do jogo):
+   cd config
+   python generate_game_id.py
+   cd ..
 
-
+6. Execute o jogo:
+   python cubirds.py

@@ -11,6 +11,8 @@ class PlayerInterface(DogPlayerInterface):
     def __init__(self):
         self.main_window = Tk()
 
+    #### VARIÁVEIS GLOBAIS ####
+
         self.n_pontos_local = 0
         self.n_pontos_remoto = 0
         self.n_cartas_baralho = 0
@@ -22,8 +24,8 @@ class PlayerInterface(DogPlayerInterface):
         self.__turno = False
         self.__selecao_mao = []
 
-        # imagens usadas ate o momento
-        # tamanho padrao das cartas 86x120
+    #### IMAGENS ####
+
         self.birds_images = [PhotoImage(file="images/carta1.png"),
                              PhotoImage(file="images/carta2.png"),
                              PhotoImage(file="images/carta3.png"),
@@ -47,6 +49,8 @@ class PlayerInterface(DogPlayerInterface):
         self.formar_bando_image = PhotoImage(file="images/formar bando.png")
         self.__passar_turno_image = PhotoImage(file="images/passar turno.png")
 
+    #### INICIALIZAÇÃO ####
+
         self.fill_main_window()
         self.mesa = Mesa(self)
         game_state = self.mesa.get_status()
@@ -55,7 +59,7 @@ class PlayerInterface(DogPlayerInterface):
         self.dog_server_interface = DogActor()
         message = self.dog_server_interface.initialize(player_name, self)
         messagebox.showinfo(message=message)
-        # preenchimento da janela
+
         self.main_window.mainloop()
 
     #### CONFIGURAÇÃO DA INTERFACE ####
@@ -95,7 +99,7 @@ class PlayerInterface(DogPlayerInterface):
         self.acoes_frame = Frame(self.main_window, width=172, height=200, bg="lightgray")
         self.acoes_frame.grid(row=2, column=0)
 
-        # imagem vazia para tudo ficar centralizado (nao sei se tem um jeito melhor de fazer isso)
+        # imagem vazia para tudo ficar centralizado
         w = Canvas(self.main_window, width=86, height=120, highlightthickness=0, bg="lightgray")
         w.grid(row=0, column=2, sticky="NSEW")
 
@@ -152,18 +156,20 @@ class PlayerInterface(DogPlayerInterface):
         baralho.grid(row=0, column=0)
 
     def create_table(self):
-        # adiciona os botoes add no inicio de cada linha
+        # adiciona os botoes jogar_cartas no inicio de cada linha
         for linha in range(len(self.__matriz_mesa)):
             aLabel = Label(self.linhas_frames[linha], bd=0, image=self.add_image)
             aLabel.grid(row=0, column=0)
             aLabel.bind("<Button-1>", lambda event, a_line=linha, a_column=0: self.jogar_cartas(a_line, a_column))
+
         # adiciona as cartas
         for linha in range(len(self.__matriz_mesa)):
             for coluna in range(1, len(self.__matriz_mesa[linha]) + 1):
                 carta = self.__matriz_mesa[linha][coluna - 1]
                 aLabel = Label(self.linhas_frames[linha], bd=0, image=self.birds_images[carta - 1])
                 aLabel.grid(row=0, column=coluna)
-        # adiciona os botoes add no final de cada linha
+
+        # adiciona os botoes jogar_cartas no final de cada linha
         for linha in range(len(self.__matriz_mesa)):
             aLabel = Label(self.linhas_frames[linha], bd=0, image=self.add_image)
             aLabel.grid(row=0, column=len(self.__matriz_mesa[linha]) + 2)
@@ -296,6 +302,5 @@ class PlayerInterface(DogPlayerInterface):
         self.mesa.set_match_status(5)
         self.notificar("O seu adversário abandonou a partida, você ganhou!")
         self.encerrar_aplicacao()
-
 
 interface = PlayerInterface()
