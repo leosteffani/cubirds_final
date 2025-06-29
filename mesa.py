@@ -55,13 +55,10 @@ class Mesa:
                     todas = self.verificar_especie_selecionada(mao, selecionadas)
                     if todas:
                         self.__local_player.remover_cartas_selecionadas_da_mao()
-                        self.add_cartas_na_mesa(selecionadas, linha, coluna)
-
-                        game_state = self.get_status()
-                        self.__player_interface.atualizar_interface(game_state)
-                        
                         especie = selecionadas[0].get_especie()
                         sanduiche = self.verificar_sanduiche(especie, linha, coluna)
+                        self.add_cartas_na_mesa(selecionadas, linha, coluna)
+
                         if len(sanduiche) > 0:
                             self.__local_player.adicionar_cartas_na_mao(sanduiche)
                             especies_na_fileira = 0
@@ -160,6 +157,7 @@ class Mesa:
                 move_to_send["match_status"] = "next"
             
             move_to_send["baralho_inicial"] = self.__baralho.get_cartas_iniciais()
+            self.__baralho.pegar_cartas(8)
         
         else: # se for o andamento do jogo
             move_to_send["inicio_partida"] = "0"
@@ -212,7 +210,11 @@ class Mesa:
         interface_image.set_n_cartas_jogador_remoto(self.__n_cartas_jogador_remoto)
 
         # cartas na mão do jogador local
-        interface_image.set_cartas_na_mao_local(self.__local_player.get_mao())
+        lista_mao =[]
+        mao =self.__local_player.get_mao()
+        for carta in mao:
+            lista_mao.append(carta.get_especie())
+        interface_image.set_cartas_na_mao_local(lista_mao)
 
         # placar
         interface_image.set_placar_local(self.__placar.get_pontos_local())
