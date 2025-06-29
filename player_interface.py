@@ -103,7 +103,10 @@ class PlayerInterface(DogPlayerInterface):
         self.draw_tela()
 
     def draw_tela(self):
-        self.clear_frame(self.table_frame)
+        self.clear_frame(self.linhas_frames[0])
+        self.clear_frame(self.linhas_frames[1])
+        self.clear_frame(self.linhas_frames[2])
+        self.clear_frame(self.linhas_frames[3])
         self.clear_frame(self.mao_frame)
         self.clear_frame(self.mao_remota_frame)
         self.clear_frame(self.bandos_local_frame)
@@ -148,7 +151,7 @@ class PlayerInterface(DogPlayerInterface):
         for linha in range(len(self.__matriz_mesa)):
             aLabel = Label(self.linhas_frames[linha], bd=0, image=self.add_image)
             aLabel.grid(row=0, column=0)
-            aLabel.bind("<Button-1>", lambda event,a_line=linha, a_column=0: self.add( a_line, a_column))
+            aLabel.bind("<Button-1>", lambda event,a_line=linha, a_column=0: self.jogar_cartas( a_line, a_column))
         #adiciona as cartas
         for linha in range(len(self.__matriz_mesa)):
             for coluna in range(1,len(self.__matriz_mesa[linha])+1):
@@ -159,7 +162,7 @@ class PlayerInterface(DogPlayerInterface):
         for linha in range(len(self.__matriz_mesa)):
             aLabel = Label(self.linhas_frames[linha], bd=0, image=self.add_image)
             aLabel.grid(row=0, column=len(self.__matriz_mesa[linha])+2)
-            aLabel.bind("<Button-1>", lambda event,a_line=linha, a_column=len(self.__matriz_mesa[linha])+1: self.add(a_line, a_column))
+            aLabel.bind("<Button-1>", lambda event,a_line=linha, a_column=len(self.__matriz_mesa[linha])+1: self.jogar_cartas(a_line, a_column))
 
     def create_mao(self):
         for x in range(len(self.__mao)):
