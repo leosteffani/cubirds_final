@@ -62,7 +62,7 @@ class PlayerInterface(DogPlayerInterface):
     def fill_main_window(self):
         # Título, dimensionamento e fundo da janela
         self.main_window.title("Cubirds")
-        self.main_window.geometry("1920x1080")
+        self.main_window.geometry("1920x1000")
         self.main_window.resizable(False, False)
         self.main_window["bg"] = "lightgray"
         
@@ -143,7 +143,7 @@ class PlayerInterface(DogPlayerInterface):
         for linha in range(len(self.__matriz_mesa)):
             aLabel = Label(self.table_frame, bd=0, image=self.add_image)
             aLabel.grid(row=linha, column=0)
-            aLabel.bind("<Button-1>", lambda event, a_line=linha, a_column=0: self.jogar_cartas(a_line, a_column))
+            aLabel.bind("<Button-1>", lambda event, a_line=linha, a_column=0: self.jogar_cartas(a_line, 0))
         
         # adiciona as cartas
         for linha in range(len(self.__matriz_mesa)):
@@ -156,7 +156,7 @@ class PlayerInterface(DogPlayerInterface):
         for linha in range(len(self.__matriz_mesa)):
             aLabel = Label(self.table_frame, bd=0, image=self.add_image)
             aLabel.grid(row=linha, column=len(self.__matriz_mesa[linha])+2)
-            aLabel.bind("<Button-1>", lambda event, a_line=linha, a_column=len(self.__matriz_mesa[linha])+1: self.jogar_cartas(a_line, a_column))
+            aLabel.bind("<Button-1>", lambda event, a_line=linha, a_column=len(self.__matriz_mesa[linha])+1: self.jogar_cartas(a_line, 1))
 
     def create_mao(self):
         for x in range(len(self.__mao)):
@@ -231,7 +231,6 @@ class PlayerInterface(DogPlayerInterface):
         messagebox.showinfo(message=message)
 
     def start_match(self):
-        print("teste")
         start_status = self.dog_server_interface.start_match(2)
         code = start_status.get_code()
         message = start_status.get_message()
@@ -241,10 +240,11 @@ class PlayerInterface(DogPlayerInterface):
             players = start_status.get_players()
             local_player_id = start_status.get_local_id()
             self.mesa.iniciar_partida(players, local_player_id)
-            game_state = self.mesa.get_status()
-            self.atualizar_interface(game_state)
             move_to_send = self.mesa.get_move(inicio=True)
             self.dog_server_interface.send_move(move_to_send)
+            self.mesa.remover_cartas_do_baralho()
+            game_state = self.mesa.get_status()
+            self.atualizar_interface(game_state)
 
     def receive_start(self, start_status):
         players = start_status.get_players()

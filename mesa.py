@@ -10,7 +10,7 @@ class Mesa:
         self.__placar = Placar()
         self.__baralho = Baralho()
         self.__cartas_na_mesa = [[], [], [], []]  # 4 linhas, cada uma com uma lista de cartas
-        self.__n_cartas_jogador_remoto = 0
+        self.__n_cartas_jogador_remoto = 8
         self.__player_interface = player_interface
         self.__match_status = 0
 
@@ -60,12 +60,15 @@ class Mesa:
                         self.add_cartas_na_mesa(selecionadas, linha, coluna)
 
                         if len(sanduiche) > 0:
+                            print("sanduiche encontrado")
                             self.__local_player.adicionar_cartas_na_mao(sanduiche)
-                            especies_na_fileira = 0
+
+                            especies_na_fileira = self.contar_especies_na_fileira(linha)
                             while especies_na_fileira <= 1:
-                                especies_na_fileira = self.contar_especies_na_fileira(linha)
                                 carta = self.__baralho.pegar_cartas(1)
                                 self.add_cartas_na_mesa(carta, linha, coluna)
+                                especies_na_fileira = self.contar_especies_na_fileira(linha)
+                                print("especies na fileira: ", especies_na_fileira)
                         
                         self.__match_status = 2
                         game_state = self.get_status()
@@ -157,7 +160,6 @@ class Mesa:
                 move_to_send["match_status"] = "next"
             
             move_to_send["baralho_inicial"] = self.__baralho.get_cartas_iniciais()
-            self.__baralho.pegar_cartas(8)
         
         else: # se for o andamento do jogo
             move_to_send["inicio_partida"] = "0"
@@ -233,6 +235,12 @@ class Mesa:
             matriz_posicoes.append(nova_linha)
 
         interface_image.set_mesa(matriz_posicoes)
+
+        # turno
+        if self.__match_status == 1 or self.__match_status == 2 or self.__match_status == 3:
+            interface_image.set_turno(True)
+        else:
+            interface_image.set_turno(False)
 
         return interface_image
 
@@ -333,22 +341,27 @@ class Mesa:
                         break
 
     def verificar_sanduiche(self, especie, linha, coluna):
+        mesa_linha = self.__cartas_na_mesa[linha]  # Mesa ORIGINAL
         retorno = []
-
-        if coluna == 0: # cartas adicionadas à esquerda
-            for carta in range(len(self.__cartas_na_mesa[linha])):
-                if self.__cartas_na_mesa[linha][carta].get_especie() == especie:
-                    for carta_sanduiche in range(carta):
-                        carta_removida = self.__cartas_na_mesa[linha].pop(0)
-                        retorno.append(carta_removida)
+        
+        if coluna == 0:  # Jogando à ESQUERDA
+            # Percorrer da esquerda para direita
+            for i in range(len(mesa_linha)):
+                if mesa_linha[i].get_especie() == especie:
+                    # Capturar do início até este índice (exclusivo)
+                    for j in range(i):
+                        retorno.append(mesa_linha.pop(0))  # Remove sempre do início
                     return retorno
-        else: # cartas adicionadas à direita
-            for carta in range(len(self.__cartas_na_mesa[linha])-1,-1,-1):
-                if self.__cartas_na_mesa[linha][carta].get_especie() == especie:
-                    for carta_sanduiche in range(carta):
-                        carta_removida = self.__cartas_na_mesa[linha].pop()
-                        retorno.append(carta_removida)
-                    return retorno
+        else:  # Jogando à DIREITA  
+            # Percorrer da direita para esquerda
+            for i in range(len(mesa_linha)-1, -1, -1):
+                if mesa_linha[i].get_especie() == especie:
+                    # Capturar deste índice até o final (exclusivo)
+                    cartas_capturadas = []
+                    for j in range(len(mesa_linha)-1, i, -1):
+                        cartas_capturadas.insert(0, mesa_linha.pop())  # Remove do final
+                    return cartas_capturadas
+        
         return retorno
 
     def add_cartas_na_mesa(self, cartas, linha, coluna):
@@ -367,6 +380,9 @@ class Mesa:
         return len(especies)
 
  #### MÉTODOS AUXILIARES ####
+
+    def remover_cartas_do_baralho(self):
+        self.__baralho.pegar_cartas(8)
 
     def atualizar_baralho(self, quantidade):
         cartas_retiradas = self.__baralho.get_num_cartas() - int(quantidade)

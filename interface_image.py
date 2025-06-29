@@ -8,6 +8,7 @@ class InterfaceImage:
         self.__bandos_local = []
         self.__bandos_remoto = []
         self.__mesa = []
+        self.__turno = False
 
     #getters
     def get_baralho(self):
@@ -26,7 +27,8 @@ class InterfaceImage:
         return self.__bandos_local
     def get_bandos_remoto(self):
         return self.__bandos_remoto
-    
+    def get_turno(self):
+        return self.__turno
 
     # setters
     def set_baralho(self, baralho):
@@ -45,4 +47,6 @@ class InterfaceImage:
         self.__bandos_local = bandos_local
     def set_bandos_remoto(self, bandos_remoto):
         self.__bandos_remoto = bandos_remoto
+    def set_turno(self, turno):
+        self.__turno = turno
 
