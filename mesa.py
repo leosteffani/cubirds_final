@@ -102,6 +102,7 @@ class Mesa:
 
                         move_to_send = self.get_move(inicio=False)
                         self.__player_interface.send_move(move_to_send)
+                        self.__player_interface.encerrar_aplicacao()
                     else:
                         self.__match_status = 3
                         move_to_send = self.get_move(inicio=False)
