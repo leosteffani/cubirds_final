@@ -6,6 +6,7 @@ from dog.dog_interface import DogPlayerInterface
 from dog.dog_actor import DogActor
 from mesa import Mesa
 
+
 class PlayerInterface(DogPlayerInterface):
     def __init__(self):
         self.main_window = Tk()
@@ -31,7 +32,7 @@ class PlayerInterface(DogPlayerInterface):
                              PhotoImage(file="images/carta6.png"),
                              PhotoImage(file="images/carta7.png"),
                              PhotoImage(file="images/carta8.png")]
-        
+
         self.birds_images_select = [PhotoImage(file="images/carta1s.png"),
                                     PhotoImage(file="images/carta2s.png"),
                                     PhotoImage(file="images/carta3s.png"),
@@ -40,7 +41,7 @@ class PlayerInterface(DogPlayerInterface):
                                     PhotoImage(file="images/carta6s.png"),
                                     PhotoImage(file="images/carta7s.png"),
                                     PhotoImage(file="images/carta8s.png")]
-        
+
         self.add_image = PhotoImage(file="images/add.png")
         self.__back_card = PhotoImage(file="images/back.png")
         self.formar_bando_image = PhotoImage(file="images/formar bando.png")
@@ -57,7 +58,7 @@ class PlayerInterface(DogPlayerInterface):
         # preenchimento da janela
         self.main_window.mainloop()
 
-#### CONFIGURAÇÃO DA INTERFACE ####
+    #### CONFIGURAÇÃO DA INTERFACE ####
 
     def fill_main_window(self):
         # Título, dimensionamento e fundo da janela
@@ -65,7 +66,7 @@ class PlayerInterface(DogPlayerInterface):
         self.main_window.geometry("1920x1000")
         self.main_window.resizable(False, False)
         self.main_window["bg"] = "lightgray"
-        
+
         # configuracao do grid main window
         self.main_window.columnconfigure(0, weight=1)
         self.main_window.columnconfigure(1, weight=1)
@@ -121,7 +122,7 @@ class PlayerInterface(DogPlayerInterface):
         self.create_formar_bando()
         self.create_finalizar_turno()
 
-#### CRIAÇÃO DOS ELEMENTOS DA INTERFACE ####
+    #### CRIAÇÃO DOS ELEMENTOS DA INTERFACE ####
 
     def create_menubar(self):
         self.menubar = Menu(self.main_window)
@@ -137,58 +138,67 @@ class PlayerInterface(DogPlayerInterface):
 
     def create_placar(self):
         if self.__turno:
-            placar = Label(self.main_window, bg="steelblue", text=str(self.n_pontos_local)+' VS '+str(self.n_pontos_remoto), font="arial 30")
+            placar = Label(self.main_window, bg="steelblue",
+                           text=str(self.n_pontos_local) + ' VS ' + str(self.n_pontos_remoto), font="arial 30")
             placar.grid(row=0, column=2)
         else:
-            placar = Label(self.main_window, bg="firebrick2", text=str(self.n_pontos_local) + ' VS ' + str(self.n_pontos_remoto), font="arial 30")
+            placar = Label(self.main_window, bg="firebrick2",
+                           text=str(self.n_pontos_local) + ' VS ' + str(self.n_pontos_remoto), font="arial 30")
             placar.grid(row=0, column=2)
 
     def create_baralho(self):
-        baralho = Label(self.main_window, bg="lightgray", text=self.n_cartas_baralho, font="arial 40", image=self.birds_images[0], compound='center')
+        baralho = Label(self.main_window, bg="lightgray", text=self.n_cartas_baralho, font="arial 40",
+                        image=self.birds_images[0], compound='center')
         baralho.grid(row=0, column=0)
+
     def create_table(self):
-        #adiciona os botoes add no inicio de cada linha
+        # adiciona os botoes add no inicio de cada linha
         for linha in range(len(self.__matriz_mesa)):
             aLabel = Label(self.linhas_frames[linha], bd=0, image=self.add_image)
             aLabel.grid(row=0, column=0)
-            aLabel.bind("<Button-1>", lambda event,a_line=linha, a_column=0: self.jogar_cartas( a_line, a_column))
-        #adiciona as cartas
+            aLabel.bind("<Button-1>", lambda event, a_line=linha, a_column=0: self.jogar_cartas(a_line, a_column))
+        # adiciona as cartas
         for linha in range(len(self.__matriz_mesa)):
-            for coluna in range(1,len(self.__matriz_mesa[linha])+1):
-                carta = self.__matriz_mesa[linha][coluna-1]
-                aLabel = Label(self.linhas_frames[linha], bd=0, image=self.birds_images[carta-1])
+            for coluna in range(1, len(self.__matriz_mesa[linha]) + 1):
+                carta = self.__matriz_mesa[linha][coluna - 1]
+                aLabel = Label(self.linhas_frames[linha], bd=0, image=self.birds_images[carta - 1])
                 aLabel.grid(row=0, column=coluna)
         # adiciona os botoes add no final de cada linha
         for linha in range(len(self.__matriz_mesa)):
             aLabel = Label(self.linhas_frames[linha], bd=0, image=self.add_image)
-            aLabel.grid(row=0, column=len(self.__matriz_mesa[linha])+2)
-            aLabel.bind("<Button-1>", lambda event,a_line=linha, a_column=len(self.__matriz_mesa[linha])+1: self.jogar_cartas(a_line, a_column))
+            aLabel.grid(row=0, column=len(self.__matriz_mesa[linha]) + 2)
+            aLabel.bind("<Button-1>",
+                        lambda event, a_line=linha, a_column=len(self.__matriz_mesa[linha]) + 1: self.jogar_cartas(
+                            a_line, a_column))
 
     def create_mao(self):
         for x in range(len(self.__mao)):
             if self.__selecao_mao[x] == False:
-                carta_mao = Label(self.mao_frame, bd=0, image=self.birds_images[self.__mao[x]-1])
-                carta_mao.grid(row=0, column=x+1)
+                carta_mao = Label(self.mao_frame, bd=0, image=self.birds_images[self.__mao[x] - 1])
+                carta_mao.grid(row=0, column=x + 1)
                 carta_mao.bind("<Button-1>", lambda event, a_column=x: self.selecionar_carta(a_column))
             else:
                 carta_mao = Label(self.mao_frame, bd=0, image=self.birds_images_select[self.__mao[x] - 1])
                 carta_mao.grid(row=0, column=x + 1)
                 carta_mao.bind("<Button-1>", lambda event, a_column=x: self.selecionar_carta(a_column))
+
     def create_mao_remota(self):
         for x in range(self.__n_cartas_jogador_remoto):
             carta_mao = Label(self.mao_remota_frame, bd=0, image=self.__back_card)
-            carta_mao.grid(row=0, column=x+1)
+            carta_mao.grid(row=0, column=x + 1)
 
     def create_bandos_local(self):
         for x in range(len(self.__bandos_local)):
             for y in range(self.__bandos_local[x][1]):
-                carta_bando = Label(self.bandos_local_frame, bd=0, image=self.birds_images[self.__bandos_local[x][0]-1])
+                carta_bando = Label(self.bandos_local_frame, bd=0,
+                                    image=self.birds_images[self.__bandos_local[x][0] - 1])
                 carta_bando.grid(row=x, column=y)
 
     def create_bandos_remoto(self):
         for x in range(len(self.__bandos_remoto)):
             for y in range(self.__bandos_remoto[x][1]):
-                carta_mao = Label(self.bandos_remoto_frame, bd=0, image=self.birds_images[self.__bandos_remoto[x][0]-1])
+                carta_mao = Label(self.bandos_remoto_frame, bd=0,
+                                  image=self.birds_images[self.__bandos_remoto[x][0] - 1])
                 carta_mao.grid(row=x, column=y)
 
     def create_formar_bando(self):
@@ -205,7 +215,8 @@ class PlayerInterface(DogPlayerInterface):
         """Destroys all widgets within a given Tkinter frame."""
         for widget in frame.winfo_children():
             widget.destroy()
-#### MÉTODOS DE INTERAÇÃO ####
+
+    #### MÉTODOS DE INTERAÇÃO ####
     def atualizar_interface(self, interface):
         self.n_pontos_local = interface.get_placar_local()
         self.n_pontos_remoto = interface.get_placar_remoto()
@@ -216,12 +227,13 @@ class PlayerInterface(DogPlayerInterface):
         self.__bandos_remoto = interface.get_bandos_remoto()
         self.__n_cartas_jogador_remoto = interface.get_n_cartas_jogador_remoto()
         self.__turno = interface.get_turno()
-        self.__selecao_mao = [False]*len(self.__mao)
+        self.__selecao_mao = [False] * len(self.__mao)
         self.draw_tela()
 
     def adicionar_selecao_carta(self, posicao):
         self.__selecao_mao[posicao] = True
         self.draw_tela()
+
     def remover_selecao_carta(self, posicao):
         self.__selecao_mao[posicao] = False
         self.draw_tela()
@@ -229,7 +241,7 @@ class PlayerInterface(DogPlayerInterface):
     def encerrar_aplicacao(self):
         sleep(5)
         self.main_window.destroy()
-    
+
     def send_move(self, move_to_send):
         self.dog_server_interface.send_move(move_to_send)
 
@@ -279,10 +291,11 @@ class PlayerInterface(DogPlayerInterface):
 
     def receive_move(self, jogada):
         self.mesa.receber_jogada(jogada)
-    
+
     def receive_withdrawal_notification(self):
         self.mesa.set_match_status(5)
         self.notificar("O seu adversário abandonou a partida, você ganhou!")
         self.encerrar_aplicacao()
+
 
 interface = PlayerInterface()
